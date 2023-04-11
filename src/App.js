@@ -1,23 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import Input from "./components/Input"
+import Button from "./components/Button"
+import List from "./components/List"
+import { useState } from "react"
+import toast, { Toaster } from 'react-hot-toast';
 
+
+const style = {
+  bg:`bg-green-500 text-white p-3 flex items-center justify-center flex-col`
+}
 function App() {
+  const notify = () => toast.error('Boş alan bırakmayınız.');
+  const notify2 = () => toast.success('Başarılı.',{
+    icon: '🤡'
+  });
+
+
+  let [deger, setDeger] = useState("")
+
+  let degerGirdisi = (e)=>{
+    setDeger(e.target.value) 
+  }
+
+  let [yeniDizi, setYeniDizi] = useState([])
+
+  let yeniDiziFunc = () =>{
+    if(deger==""){
+      notify()
+      return
+    } 
+    let newArray = [...yeniDizi,deger]
+      setYeniDizi(newArray)
+
+      setDeger("")
+      notify2()
+  }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={style.bg}>
+      <Input value={deger} onChange={degerGirdisi}/>
+      <Button onClick={yeniDiziFunc}/> 
+      {
+        yeniDizi.map((element,index)=>(
+          <List data={element} key={index}/>
+        ))
+      } 
+      <Toaster
+      position="top-right"
+      reverseOrder={false}
+      />
     </div>
   );
 }
